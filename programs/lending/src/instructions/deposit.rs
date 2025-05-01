@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::clock};
 use anchor_spl::{associated_token::AssociatedToken,  token_interface::{Mint , TokenAccount, TokenInterface , TransferChecked , transfer_checked }} ;
 
 use crate::{Bank, User};
@@ -106,6 +106,8 @@ pub fn process_deposit(ctx : Context<Deposit> ,  amount : u64) -> Result<()>{
     if bank.total_deposits != amount{
     bank.total_deposits += amount;
     bank.total_deposits +=  user_shares;}
+
+    user_account.last_updated = Clock::get()?.unix_timestamp;
 
 
     Ok(())

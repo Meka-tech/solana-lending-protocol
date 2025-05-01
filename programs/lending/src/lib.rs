@@ -12,6 +12,10 @@ mod state;
 
 pub use state::*;
 
+mod constants;
+
+pub  use constants::*;
+
 
 declare_id!("6bW9gxKNiL6HarrGicQoaGToNpLZceZYzqMpEVZ15mkJ");
 
@@ -32,6 +36,9 @@ pub mod lending {
     }
     pub fn withdraw(ctx : Context<Withdraw> , amount : u64) -> Result<()>{
         process_widthraw(ctx, amount)
+    }
+    pub fn borrow(ctx : Context<Borrow> , amount : u64) -> Result<()>{
+        process_borrow(ctx, amount)
     }
 }
 

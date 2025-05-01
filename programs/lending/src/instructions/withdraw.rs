@@ -1,3 +1,7 @@
+
+
+use std::f32::consts::E;
+
 use anchor_lang::prelude::*;
 use anchor_spl::{associated_token::AssociatedToken, token_interface::{Mint , TokenAccount, TokenInterface , transfer_checked , TransferChecked }};
 
@@ -55,6 +59,8 @@ pub fn process_widthraw(ctx : Context<Withdraw> , amount : u64) -> Result<()>{
 
     let user_account = &mut ctx.accounts.user_account;
 
+    let bank =  &mut ctx.accounts.bank ;
+
     let deposited_value : u64;
 
     //check how much is deposited in the bank user is withdrawing from
@@ -67,11 +73,24 @@ pub fn process_widthraw(ctx : Context<Withdraw> , amount : u64) -> Result<()>{
         deposited_value = user_account.deposited_sol;
     }
 
-    if amount > deposited_value {
-        return  Err(CustomError::InsufficientFunds.into());
+    let time_diff =  user_account.last_updated - Clock::get()?.unix_timestamp ;
+
+    bank.total_deposits = (bank.total_deposits as f64 * E.powf(bank.interest_rate as f32 * time_diff as f32) as f64) as u64;
+    
+
+    let value_per_share = bank.total_deposits as f64 /  bank.total_deposit_shares as f64;
+
+    let user_value = deposited_value as f64/value_per_share;
+
+    if user_value < amount as f64 {
+        return Err(CustomError::InsufficientFunds.into());
+
     }
 
-    // transfer from bank to user
+
+
+  
+    // transfer from bank to user d
 
     let mint_key = ctx.accounts.mint.key();
     let signer_seeds : &[&[&[u8]]] = &[
@@ -97,7 +116,7 @@ pub fn process_widthraw(ctx : Context<Withdraw> , amount : u64) -> Result<()>{
     transfer_checked(cpi_context, amount, decimals)?;
 
     //update state
-    let bank =  &mut ctx.accounts.bank ;
+
 
     let shares_to_remove = (amount as f64/bank.total_deposits as f64) * bank.total_deposit_shares as f64;
 
