@@ -6,5 +6,8 @@ pub enum CustomError{
     InsufficientFunds,
 
     #[msg("Requested amount exceeds borrowable amount")]
-    OverBorrowableAmount
+    OverBorrowableAmount,
+
+    #[msg("Amount exceeds debt ")]
+    OverRepay
 }

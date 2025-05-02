@@ -90,7 +90,7 @@ pub fn process_widthraw(ctx : Context<Withdraw> , amount : u64) -> Result<()>{
 
 
   
-    // transfer from bank to user d
+    // transfer from bank to user 
 
     let mint_key = ctx.accounts.mint.key();
     let signer_seeds : &[&[&[u8]]] = &[
