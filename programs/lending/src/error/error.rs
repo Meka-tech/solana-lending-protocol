@@ -9,5 +9,8 @@ pub enum CustomError{
     OverBorrowableAmount,
 
     #[msg("Amount exceeds debt ")]
-    OverRepay
+    OverRepay,
+
+    #[msg("User is not under collateralized so it can't be liquidated ")]
+    NotUnderCollateralized
 }

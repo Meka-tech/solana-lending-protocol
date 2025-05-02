@@ -21,6 +21,8 @@ declare_id!("6bW9gxKNiL6HarrGicQoaGToNpLZceZYzqMpEVZ15mkJ");
 
 #[program]
 pub mod lending {
+
+
     use super::*;
 
     pub fn init_bank(ctx: Context<InitBank> , liquidation_threshold : u64 , max_ltv: u64) -> Result<()> {
@@ -42,6 +44,9 @@ pub mod lending {
     }
     pub fn repay(ctx : Context<Repay> ,  amount : u64) -> Result<()>{
         process_repay(ctx, amount)
+    }
+    pub fn liquidate(ctx : Context<Liquidate>) -> Result<()>{
+        process_liquidate(ctx)
     }
 }
 

@@ -155,7 +155,7 @@ pub fn process_borrow(ctx  : Context<Borrow>,  amount : u64) ->Result<()>{
 }
 
 
-fn calculate_accrued_interest (deposited_value : u64 ,  interest_rate : u64 , last_updated : i64) -> Result<u64> {
+pub fn calculate_accrued_interest (deposited_value : u64 ,  interest_rate : u64 , last_updated : i64) -> Result<u64> {
 
     let current_time = Clock::get()?.unix_timestamp;
 
